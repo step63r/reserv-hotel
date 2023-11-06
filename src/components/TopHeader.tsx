@@ -1,23 +1,22 @@
-import React from 'react';
 import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-  useMsal,
-} from '@azure/msal-react'
-import {
-  Button,
   Box,
+  Button,
   Flex,
-  Heading,
+  Hide,
   Spacer,
   Text
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from '../authConfig';
 
-const Header: React.FC = () => {
+type Props = {
+  onOpen: () => void;
+}
+
+const TopHeader = (props: Props) => {
   const { instance } = useMsal();
   const activeAccount = instance.getActiveAccount();
-
   const handleRedirect = () => {
     instance
       .loginRedirect({
@@ -30,16 +29,30 @@ const Header: React.FC = () => {
   return (
     <Flex
       as="header"
-      position="fixed"
-      bg="gray.100"
       top={0}
-      width="full"
+      width="100%"
+      height="100%"
+      bg="azure"
       shadow="sm"
-      py={4}
-      px={8}
+      align="center"
+      px={{ base: 2, lg: 4 }}
     >
-      <Box bg="transparent">
-        <Heading>ホテル自動予約サービス</Heading>
+      <Hide above="lg">
+        <Button
+          variant="ghost"
+          fontSize={{ base: "xl", lg: "3xl" }}
+          boxSize={{ base: 8, lg: 16 }}
+          onClick={() => props.onOpen()}
+        >
+          <HamburgerIcon />
+        </Button>
+      </Hide>
+      <Box
+        ml={{ base: 2, lg: 4 }}
+        fontSize={{ base: "xl", lg: "3xl" }}
+        fontWeight="bold"
+      >
+        ホテル自動予約サービス
       </Box>
       <Spacer />
       <Box bg="transparent">
@@ -52,7 +65,7 @@ const Header: React.FC = () => {
         </UnauthenticatedTemplate>
       </Box>
     </Flex>
-  )
+  );
 };
 
-export default Header;
+export default TopHeader;
